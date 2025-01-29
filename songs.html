@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Song List</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+
+  <style>
+    /* General Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    :root {
+      --main-color: #216C27;
+      --second-color: #1C211C;
+      --white: #ffffff;
+      --gray: #f9f9f9;
+      --hover-color: #1a4f1e;
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      width: 100%;
+      height: 60px;
+      top: 0;
+      right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+      box-shadow: 0 4px 40px rgb(14 55 54 / 14%);
+      padding: 15px 10%;
+      transition: 0.2s;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 11px;
+      color: var(--main-color);
+      text-shadow: 1px 1px #B5B5B5;
+      background-color: transparent;
+      border: 2px;
+      box-shadow: 0 2px 4px #000000;
+      border-radius: 40px;
+      width: 40px;
+      height: 40px;
+      font-weight: 600;
+      padding: 5px;
+      text-align: center;
+    }
+
+    .logo img {
+      width: 40px;
+    }
+
+    .navbar {
+      display: flex;
+    }
+
+    .navbar a {
+      font-size: 1rem;
+      padding: 11px 20px;
+      color: var(--second-color);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .navbar a:hover {
+      color: var(--main-color);
+    }
+
+    #menu-icon {
+      font-size: 30px;
+      width: 50px;
+      cursor: pointer;
+      z-index: 1001;
+      display: block;
+      color: var(--second-color);
+      margin-right: -20px;
+    }
+
+    /* Mobile Menu */
+    .navbar {
+      position: absolute;
+      top: 60px; /* Position below the header */
+      left: 0;
+      right: 0;
+      background: #FFFFFF;
+      box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+      display: none; /* Hide the navbar by default */
+      flex-direction: column;
+      text-align: left;
+    }
+
+    .navbar.active {
+      display: flex; /* Show the navbar when active */
+    }
+
+    .navbar a {
+      padding: 15px;
+      color: var(--second-color);
+      text-decoration: none;
+    }
+
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8); /* Semi-transparent black background */
+      display: none; /* Initially hidden */
+      align-items: center;
+      justify-content: center;
+      z-index: 9999; /* Ensure it covers everything */
+    }
+
+    /* Loading content */
+    .loading-container {
+      text-align: center;
+      color: white;
+    }
+
+    /* Spinner design */
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid transparent;
+      border-top-color: #00ffcc;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 10px;
+    }
+
+    /* Loading text */
+    .loading-container p {
+      font-size: 18px;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    /* Spinner animation */
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Song List */
+.song-box {
+  width: 300px; /* Keep a fixed width for consistency */
+  height: 50px; /* Let the height adjust based on content */
+  background: var(--main-color);
+  border: 2px solid #000000;
+  border-radius: 8px;
+  padding: 7px; /* Adjust padding for better spacing */
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+  margin: 20px 0 0 0; /* Set margin to space out the boxes */
+  display: flex; /* Use flexbox for consistent layout */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#song-results {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Center the song boxes */
+  gap: 10px; /* Reduce gap between song boxes */
+  padding: 20px;
+  margin: 150px 0 0 0;
+  z-index: 0;
+  
+}
+
+
+    .song-box:hover {
+      transform: scale(1.05);
+      background: var(--white);
+      color: var(--main-color);
+    }
+
+    .song-box h3 {
+      font-size: 1.2rem;
+      margin-bottom: 1px;
+      color: var(--white);
+    }
+   
+
+    .song-box p {
+      font-size: 1rem;
+      color: var(--white);
+    }
+
+    /* Song Form */
+#song-form {
+  display: none; /* Initially hidden */
+  position: fixed; /* Fixed to cover the entire viewport */
+  top: 50px;
+  left: 0;
+  width: 100%; /* Full width of the screen */
+  height: 100%; /* Full height of the screen */
+  background: white; 
+  z-index: 1000; 
+  justify-content: center;
+  align-items: center;
+}
+
+.form-content {
+  background: var(--white);
+  width: 90%;
+  max-width: 600px;
+  max-height: 100%; /* Restrict the height */
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  overflow-y: auto; /* Enable scrolling if content overflows */
+  transform: translateY(-50px); /* Move the form 50px upward */
+  transition: transform 0.3s ease; /* Smooth transition when showing the form */
+}
+
+    .form-content h1 {
+   background: #92D8A4;
+   border-radius: 10px;
+   padding: 1px;
+   width: 200px;
+   margin: 10px 0 0 90px;
+   font-size: 1.5rem;
+   color: var(--main-color);
+   margin-bottom: 10px;
+ }
+
+    .form-content h2 {
+      font-size: 0.8rem;
+      color: var(--main-color);
+      margin-bottom: -21px;
+    }
+
+    .form-content h3 {
+      font-size: 1rem;
+      margin-top: 70px;
+      margin-bottom: 20px;
+      color: var(--second-color);
+    }
+
+    .form-content p {
+      text-align: left;
+      margin: 5px 0 20px 0;
+      font-size: 1rem;
+      
+    }
+    
+    .chord {
+      background: #CCE8D4;
+      color: green;
+      font-weight: bold;
+      
+}
+
+    
+    
+    
+
+
+    #close-btn {
+      background: var(--main-color);
+      color: var(--white);
+      width: 30px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 3px;
+      margin-right: -355px;
+      font-size: 25px;
+      font-weight: bold;
+      height: 30px;
+      
+    }
+
+    #close-btn:hover {
+      background: var(--hover-color);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .form-content {
+        width: 100%;
+        margin: 10px;
+        
+      }
+
+      header {
+        padding: 11px 4%;
+      }
+
+      .navbar {
+        display: none; /* Hide the navbar initially */
+        position: absolute;
+        top: -500px;
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-direction: column;
+        background: #FFFFFF;
+        box-shadow: 0 4px 4px rgb(14 55 54 / 24%);
+        border-top: 2px solid var(--main-color);
+        transition: 0.2s;
+        text-align: left;
+      }
+
+      .navbar.active {
+        top: 100%;
+      }
+
+      .navbar a {
+        padding: 1.5rem;
+        display: block;
+        color: var(--second-color);
+      }
+
+      #menu-icon {
+        display: block; /* Ensure the menu icon is visible on mobile */
+      }
+      
+
+
+
+
+
+.search{ 
+  position: fixed;
+  top: 60px;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 90px;
+  background: transparent;
+}
+
+
+.search-bar {
+  width: 80%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 2px solid var(--main-color);
+  border-radius: 5px;
+  outline: none;
+}
+
+.search-bar:focus {
+  border-color: var(--hover-color);
+}
+
+  .search-btn {
+    padding: 10px 15px;
+    font-size: 1rem;
+    background-color: var(--main-color);
+    color: var(--white);
+    border: none;
+    border-radius: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .search-btn:hover {
+    background-color: var(--hover-color);
+  }
+
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a onclick="redirectWithLoading('index.html')" class="logo">WilaN<br>GuitaR</a>
+  <div class="bx bx-menu" id="menu-icon"></div>
+  
+    <ul class="navbar">
+      <li><a onclick="redirectWithLoading('index.html')">home</a></li>
+      <li><a onclick="redirectWithLoading('echord.html')">chords</a></li>
+      <li><a href="#favorite">favorite</a></li>
+  
+    </ul>
+          <div id="loading-screen">
+            <div class="loading-container">
+              <div class="spinner"></div>
+              <p>Loading... Please wait</p>
+            </div>
+          </div>
+  
+</header>
+
+<!-- Search Bar -->
+<section class="search" id="search-section" style="padding: 20px; text-align: center;">
+  <input type="text" id="search-bar" class="search-bar" placeholder="Search for songs..." oninput="showSuggestions(this.value)" />
+  
+ <button id="search-button" class="search-btn" onclick="searchSongs()">Search</button>
+
+</section>
+
+<!-- Song List -->
+<section id="song-results"></section>
+
+<!-- Song Form -->
+<div id="song-form" style="display: none;">
+  <div class="form-content">
+    <button id="close-btn" onclick="closeForm()">x</button>
+    <h1 id="song-title"></h1>
+    <h2 id="song-artist"></h2>
+    <div id="song-lyrics1"></div>
+    <div id="song-lyrics2"></div>
+
+  </div>
+</div>
+
+<script>
+
+
+let menu = document.querySelector('#menu-icon');
+let navbar = document.querySelector('.navbar');
+
+menu.onclick = () => {
+  menu.classList.toggle('bx-x');
+  navbar.classList.toggle('active');
+};
+
+window.onscroll = () => {
+  menu.classList.remove('bx-x');
+  navbar.classList.remove('active');
+};
+
+// Hide navbar when clicking anywhere outside
+document.addEventListener('click', (event) => {
+  if (!menu.contains(event.target) && !navbar.contains(event.target)) {
+    menu.classList.remove('bx-x');
+    navbar.classList.remove('active');
+  }
+});
+
+
+
+
+
+  function redirectWithLoading(url) {
+  const loadingScreen = document.getElementById('loading-screen');
+  
+  // Show the loading screen
+  loadingScreen.style.display = 'flex';
+  
+  // Delay redirection for 2 seconds
+  setTimeout(() => {
+    window.location.href = url;
+  }, 150); // 2 seconds delay
+}
+
+
+
+
+// Function to show suggestions based on the search query
+function showSuggestions(query) {
+  const resultsDiv = document.getElementById("song-results");
+  const searchBar = document.getElementById("search-bar"); // Reference to the search bar
+  const songs = fetchSongsFromLocalStorage();
+
+  // If query is empty, show all songs
+  if (!query.trim()) {
+    resultsDiv.innerHTML = songs
+      .map(
+        (song, index) => `
+        <div class="song-box" onclick="selectSong('${song.title}', ${index})">
+          <h3>${song.title}</h3>
+          <p>by ${song.artist}</p>
+        </div>
+      `
+      )
+      .join("");
+    return;
+  }
+
+  // Filter songs based on the query
+  const filteredSongs = songs.filter(song =>
+    song.title.toLowerCase().includes(query.toLowerCase())
+  );
+
+  // Show filtered songs
+  resultsDiv.innerHTML = filteredSongs
+    .map(
+      (song, index) => `
+      <div class="song-box" onclick="selectSong('${song.title}', ${index})">
+        <h3>${song.title}</h3>
+        <p>by ${song.artist}</p>
+      </div>
+    `
+    )
+    .join("");
+}
+
+// Function to handle song selection from suggestions
+function selectSong(title) {
+  const searchBar = document.getElementById("search-bar");
+  searchBar.value = title; // Set the selected title in the search bar
+  showSongForm(title); // Pass the title of the song directly
+}
+
+function showSongForm(title) {
+  const songs = fetchSongsFromLocalStorage();
+  const song = songs.find(song => song.title === title);
+
+  if (!song) {
+    alert("Song not found!");
+    return;
+  }
+
+  document.getElementById("song-title").innerText = song.title;
+  document.getElementById("song-artist").innerText = `by ${song.artist}`;
+
+  // Function to highlight chords
+  function highlightChords(line) {
+  return line.replace(/\b([A-G](?:#|b)?(?:maj|min|dim|aug|add|sus|m|M)?\d*)\b/g, '<span class="chord">$1</span>');
+}
+
+
+  // Display first set of lyrics
+  if (song.lyrics) {
+    document.getElementById("song-lyrics1").innerHTML = song.lyrics
+      .slice(0, Math.ceil(song.lyrics.length / 2))
+      .map(
+        (line) => `
+        <p><strong>${highlightChords(line.chords || "")}</strong></p>
+        <p>${highlightChords(line.line)}</p>
+      `
+      )
+      .join("");
+  }
+
+  // Display second set of lyrics
+  if (song.lyrics) {
+    document.getElementById("song-lyrics2").innerHTML = song.lyrics
+      .slice(Math.ceil(song.lyrics.length / 2))
+      .map(
+        (line) => `
+        <p><strong>${highlightChords(line.chords || "")}</strong></p>
+        <p>${highlightChords(line.line)}</p>
+      `
+      )
+      .join("");
+  }
+
+  // Show the song form
+  document.getElementById("song-form").style.display = "flex";
+}
+
+
+// Function to fetch songs from local storage
+function fetchSongsFromLocalStorage() {
+  return JSON.parse(localStorage.getItem("songs")) || [];
+}
+
+// Function to close the song form
+function closeForm() {
+  document.getElementById("song-form").style.display = "none";
+}
+
+// Initialize song display on page load
+window.onload = showSuggestions("");
+</script>
+</body>
+</html>

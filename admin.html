@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --main-color: #216C27;
+      --hover-color: #1a4f1e;
+      --white: #ffffff;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: row;
+      transition: margin-left 0.3s;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: var(--main-color);
+      color: white;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: -250px;
+      padding: 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      transition: left 0.3s ease;
+      z-index: 1;
+    }
+
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      display: block;
+      font-size: 1.2rem;
+    }
+
+    .sidebar a:hover {
+      background: var(--hover-color);
+    }
+
+    .exit-btn {
+      background-color: transparent;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2rem;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      transition: background-color 0.3s ease;
+    }
+
+    .exit-btn:hover {
+      background-color: white;
+      color: var(--main-color);
+    }
+
+    .main-content {
+      margin-left: 0;
+      padding: 20px;
+      flex: 1;
+      transition: margin-left 0.3s;
+    }
+
+    .admin-dashboard {
+      margin: 50px auto;
+      padding: 20px;
+      max-width: 600px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .admin-dashboard h2 {
+      color: var(--main-color);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .admin-dashboard input,
+    .admin-dashboard textarea {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid var(--main-color);
+      border-radius: 5px;
+      font-size: 1rem;
+      margin-bottom: 10px;
+    }
+
+    .admin-dashboard button {
+      padding: 10px;
+      background: var(--main-color);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .admin-dashboard button:hover {
+      background: var(--hover-color);
+    }
+
+    #song-results {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+
+    .song-box {
+      width: 250px;
+      background-color: #ffffff;
+      border: 2px solid var(--main-color);
+      padding: 10px;
+      margin: 10px;
+      text-align: center;
+      border-radius: 8px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .song-box:hover {
+      background: var(--main-color);
+      color: white;
+    }
+
+    .song-box button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #ff4d4d;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .song-box button:hover {
+      background-color: #cc0000;
+    }
+
+    .bx-menu {
+      font-size: 30px;
+      color: var(--main-color);
+      cursor: pointer;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 1001;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 250px;
+        left: -250px;
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .sidebar.active {
+        left: 0;
+      }
+
+      .bx-menu {
+        display: block;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="sidebar" id="sidebar">
+    <button class="exit-btn" onclick="closeSidebar()">X</button>
+    <h2>Admin Panel</h2>
+    <a href="#add-song">Add Song</a>
+    <a href="index.html">Logout</a>
+  </div>
+
+  <div class="bx bx-menu" id="menu-icon" onclick="toggleSidebar()"></div>
+
+  <div class="main-content">
+    <section class="admin-dashboard">
+      <h2>Admin Dashboard</h2>
+      <form id="admin-form" onsubmit="handleAddSong(event)">
+        <input type="text" id="admin-title" placeholder="Song Title" required>
+        <input type="text" id="admin-artist" placeholder="Artist" required>
+        <textarea id="admin-lyrics1" placeholder="Lyrics (Verse)" required></textarea>
+
+        <button type="submit">Add Song</button>
+      </form>
+    </section>
+
+    <section id="song-results">
+      <!-- Song list will appear here -->
+    </section>
+  </div>
+
+  <script>
+  
+  // Function to handle click outside the sidebar to close it
+document.addEventListener('click', function(event) {
+  const sidebar = document.getElementById("sidebar");
+  const menuButton = document.getElementById("menu-icon");
+  if (!sidebar.contains(event.target) && !menuButton.contains(event.target)) {
+    sidebar.classList.remove("active");
+  }
+});
+  
+  
+    let songs = JSON.parse(localStorage.getItem("songs")) || [];
+
+    function saveSongsToLocalStorage() {
+      localStorage.setItem("songs", JSON.stringify(songs));
+    }
+
+    function displaySongs() {
+      const resultsDiv = document.getElementById("song-results");
+      resultsDiv.innerHTML = songs
+        .map((song, index) => `
+          <div class="song-box">
+            <h3>${song.title}</h3>
+            <p>by ${song.artist}</p>
+            <button onclick="deleteSong(event, ${index})">Delete</button>
+          </div>
+        `)
+        .join("");
+    }
+
+function handleAddSong(event) {
+  event.preventDefault();
+
+  // Get input values
+  const title = document.getElementById("admin-title").value;
+  const artist = document.getElementById("admin-artist").value;
+
+  // Get lyrics with chords from the single textarea
+  const lyrics = document.getElementById("admin-lyrics1").value
+    .split("\n") // Split input by line
+    .map(line => ({ line })); // Store each line as an object
+
+  // Add new song to the songs array
+  songs.push({ title, artist, lyrics });
+
+  // Save to local storage and refresh the song list
+  saveSongsToLocalStorage();
+  displaySongs();
+
+  // Clear the form
+  document.getElementById("admin-form").reset();
+}
+
+
+
+    function deleteSong(event, index) {
+      event.stopPropagation();
+      songs.splice(index, 1);
+      saveSongsToLocalStorage();
+      displaySongs();
+    }
+
+    function toggleSidebar() {
+      document.getElementById("sidebar").classList.toggle("active");
+    }
+
+    function closeSidebar() {
+      document.getElementById("sidebar").classList.remove("active");
+    }
+
+    window.onload = displaySongs;
+  </script>
+</body>
+
+</html>
