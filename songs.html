@@ -516,32 +516,51 @@ function showSongForm(title) {
     return line.replace(/\b([A-G](?:#|b)?(?:maj|min|dim|aug|add|sus|m|M)?\d*)\b/g, '<span class="chord">$1</span>');
   }
 
-  if (song.lyrics && Array.isArray(song.lyrics)) {
+  const lyrics1 = document.getElementById("song-lyrics1");
+  const lyrics2 = document.getElementById("song-lyrics2");
+
+  lyrics1.innerHTML = "";
+  lyrics2.innerHTML = "";
+
+  // ✅ If lyrics is an array of objects (recommended format)
+  if (Array.isArray(song.lyrics)) {
     const half = Math.ceil(song.lyrics.length / 2);
 
-    document.getElementById("song-lyrics1").innerHTML = song.lyrics
+    lyrics1.innerHTML = song.lyrics
       .slice(0, half)
-      .map(
-        (line) => `
-          <p><strong>${highlightChords(line.chords || "")}</strong></p>
-          <p>${highlightChords(line.line || "")}</p>
-        `
+      .map(line =>
+        `<p><strong>${highlightChords(line.chords || "")}</strong></p><p>${highlightChords(line.line || "")}</p>`
       )
       .join("");
 
-    document.getElementById("song-lyrics2").innerHTML = song.lyrics
+    lyrics2.innerHTML = song.lyrics
       .slice(half)
-      .map(
-        (line) => `
-          <p><strong>${highlightChords(line.chords || "")}</strong></p>
-          <p>${highlightChords(line.line || "")}</p>
-        `
+      .map(line =>
+        `<p><strong>${highlightChords(line.chords || "")}</strong></p><p>${highlightChords(line.line || "")}</p>`
       )
       .join("");
   }
 
+  // ✅ If lyrics is a plain string (fallback)
+  else if (typeof song.lyrics === "string") {
+    const lines = song.lyrics.split("\n");
+    const half = Math.ceil(lines.length / 2);
+
+    lyrics1.innerHTML = lines
+      .slice(0, half)
+      .map(line => `<p>${highlightChords(line)}</p>`)
+      .join("");
+
+    lyrics2.innerHTML = lines
+      .slice(half)
+      .map(line => `<p>${highlightChords(line)}</p>`)
+      .join("");
+  }
+
+  // Show the song form
   document.getElementById("song-form").style.display = "flex";
 }
+
 
 function closeForm() {
   document.getElementById("song-form").style.display = "none";
