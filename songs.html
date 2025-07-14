@@ -464,7 +464,8 @@ let songData = []; // store all songs globally
 
 async function fetchSongsFromBackend() {
   try {
-    const response = await fetch("http://127.0.0.1:8000/api/songs/");
+    const response = await fetch("https://guitar-backend-d6ij.onrender.com/api/songs/
+");
     const data = await response.json();
     songData = data;
     showSuggestions(""); // display all on load
