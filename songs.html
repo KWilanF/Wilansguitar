@@ -429,7 +429,8 @@
 
   </div>
 </div>
-<script>
+  
+  <script>
 let menu = document.querySelector('#menu-icon');
 let navbar = document.querySelector('.navbar');
 
@@ -463,7 +464,7 @@ let songData = []; // store all songs globally
 
 async function fetchSongsFromBackend() {
   try {
-    const response = await fetch("https://your-backend-url.com/api/songs/"); // <--- 🔁 PUT YOUR BACKEND URL HERE
+    const response = await fetch("http://127.0.0.1:8000/api/songs/");
     const data = await response.json();
     songData = data;
     showSuggestions(""); // display all on load
@@ -555,6 +556,7 @@ function searchSongs() {
 // Initialize
 window.onload = fetchSongsFromBackend;
 </script>
+
 
 
 </body>
