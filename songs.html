@@ -429,10 +429,7 @@
 
   </div>
 </div>
-
 <script>
-
-
 let menu = document.querySelector('#menu-icon');
 let navbar = document.querySelector('.navbar');
 
@@ -446,7 +443,6 @@ window.onscroll = () => {
   navbar.classList.remove('active');
 };
 
-// Hide navbar when clicking anywhere outside
 document.addEventListener('click', (event) => {
   if (!menu.contains(event.target) && !navbar.contains(event.target)) {
     menu.classList.remove('bx-x');
@@ -454,75 +450,59 @@ document.addEventListener('click', (event) => {
   }
 });
 
-
-
-
-
-  function redirectWithLoading(url) {
+function redirectWithLoading(url) {
   const loadingScreen = document.getElementById('loading-screen');
-  
-  // Show the loading screen
   loadingScreen.style.display = 'flex';
-  
-  // Delay redirection for 2 seconds
   setTimeout(() => {
     window.location.href = url;
-  }, 150); // 2 seconds delay
+  }, 150);
 }
 
+// --- Fetch Songs from Django Backend ---
+let songData = []; // store all songs globally
 
+async function fetchSongsFromBackend() {
+  try {
+    const response = await fetch("https://your-backend-url.com/api/songs/"); // <--- 🔁 PUT YOUR BACKEND URL HERE
+    const data = await response.json();
+    songData = data;
+    showSuggestions(""); // display all on load
+  } catch (error) {
+    console.error("Failed to fetch songs:", error);
+  }
+}
 
-
-// Function to show suggestions based on the search query
+// Show Suggestions based on query
 function showSuggestions(query) {
   const resultsDiv = document.getElementById("song-results");
-  const searchBar = document.getElementById("search-bar"); // Reference to the search bar
-  const songs = fetchSongsFromLocalStorage();
 
-  // If query is empty, show all songs
-  if (!query.trim()) {
-    resultsDiv.innerHTML = songs
-      .map(
-        (song, index) => `
-        <div class="song-box" onclick="selectSong('${song.title}', ${index})">
+  const filtered = !query.trim()
+    ? songData
+    : songData.filter(song =>
+        song.title.toLowerCase().includes(query.toLowerCase())
+      );
+
+  resultsDiv.innerHTML = filtered
+    .map(
+      (song, index) => `
+        <div class="song-box" onclick="selectSong('${song.title}')">
           <h3>${song.title}</h3>
           <p>by ${song.artist}</p>
         </div>
       `
-      )
-      .join("");
-    return;
-  }
-
-  // Filter songs based on the query
-  const filteredSongs = songs.filter(song =>
-    song.title.toLowerCase().includes(query.toLowerCase())
-  );
-
-  // Show filtered songs
-  resultsDiv.innerHTML = filteredSongs
-    .map(
-      (song, index) => `
-      <div class="song-box" onclick="selectSong('${song.title}', ${index})">
-        <h3>${song.title}</h3>
-        <p>by ${song.artist}</p>
-      </div>
-    `
     )
     .join("");
 }
 
-// Function to handle song selection from suggestions
+// Called when clicking a suggestion
 function selectSong(title) {
-  const searchBar = document.getElementById("search-bar");
-  searchBar.value = title; // Set the selected title in the search bar
-  showSongForm(title); // Pass the title of the song directly
+  document.getElementById("search-bar").value = title;
+  showSongForm(title);
 }
 
+// Show full song
 function showSongForm(title) {
-  const songs = fetchSongsFromLocalStorage();
-  const song = songs.find(song => song.title === title);
-
+  const song = songData.find(s => s.title === title);
   if (!song) {
     alert("Song not found!");
     return;
@@ -531,55 +511,51 @@ function showSongForm(title) {
   document.getElementById("song-title").innerText = song.title;
   document.getElementById("song-artist").innerText = `by ${song.artist}`;
 
-  // Function to highlight chords
   function highlightChords(line) {
-  return line.replace(/\b([A-G](?:#|b)?(?:maj|min|dim|aug|add|sus|m|M)?\d*)\b/g, '<span class="chord">$1</span>');
-}
+    return line.replace(/\b([A-G](?:#|b)?(?:maj|min|dim|aug|add|sus|m|M)?\d*)\b/g, '<span class="chord">$1</span>');
+  }
 
+  if (song.lyrics && Array.isArray(song.lyrics)) {
+    const half = Math.ceil(song.lyrics.length / 2);
 
-  // Display first set of lyrics
-  if (song.lyrics) {
     document.getElementById("song-lyrics1").innerHTML = song.lyrics
-      .slice(0, Math.ceil(song.lyrics.length / 2))
+      .slice(0, half)
       .map(
         (line) => `
-        <p><strong>${highlightChords(line.chords || "")}</strong></p>
-        <p>${highlightChords(line.line)}</p>
-      `
+          <p><strong>${highlightChords(line.chords || "")}</strong></p>
+          <p>${highlightChords(line.line || "")}</p>
+        `
       )
       .join("");
-  }
 
-  // Display second set of lyrics
-  if (song.lyrics) {
     document.getElementById("song-lyrics2").innerHTML = song.lyrics
-      .slice(Math.ceil(song.lyrics.length / 2))
+      .slice(half)
       .map(
         (line) => `
-        <p><strong>${highlightChords(line.chords || "")}</strong></p>
-        <p>${highlightChords(line.line)}</p>
-      `
+          <p><strong>${highlightChords(line.chords || "")}</strong></p>
+          <p>${highlightChords(line.line || "")}</p>
+        `
       )
       .join("");
   }
 
-  // Show the song form
   document.getElementById("song-form").style.display = "flex";
 }
 
-
-// Function to fetch songs from local storage
-function fetchSongsFromLocalStorage() {
-  return JSON.parse(localStorage.getItem("songs")) || [];
-}
-
-// Function to close the song form
 function closeForm() {
   document.getElementById("song-form").style.display = "none";
 }
 
-// Initialize song display on page load
-window.onload = showSuggestions("");
+// Search button click
+function searchSongs() {
+  const query = document.getElementById("search-bar").value;
+  showSuggestions(query);
+}
+
+// Initialize
+window.onload = fetchSongsFromBackend;
 </script>
+
+
 </body>
 </html>
