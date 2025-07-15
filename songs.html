@@ -61,9 +61,7 @@
       width: 40px;
     }
 
-    .navbar {
-      display: flex;
-    }
+    
 
     .navbar a {
       font-size: 1rem;
@@ -98,17 +96,21 @@
   display: none;
   flex-direction: column;
   text-align: left;
+  z-index: 999;
 }
 
 .navbar.active {
   display: flex;
 }
 
-    .navbar a {
-      padding: 15px;
-      color: var(--second-color);
-      text-decoration: none;
-    }
+.navbar a {
+  padding: 15px;
+  color: var(--second-color);
+  text-decoration: none;
+  font-weight: bold;
+  display: block;
+}
+
 
     #loading-screen {
       position: fixed;
@@ -391,21 +393,21 @@
 <header>
   <a onclick="redirectWithLoading('index.html')" class="logo">WilaN<br>GuitaR</a>
   <div class="bx bx-menu" id="menu-icon"></div>
-  
-    <nav class="navbar" id="navbar">
-  <a onclick="redirectWithLoading('index.html')">Home</a>
-  <a onclick="redirectWithLoading('echord.html')">Chords</a>
-  <a href="#favorite">Favorite</a>
-</nav>
 
-          <div id="loading-screen">
-            <div class="loading-container">
-              <div class="spinner"></div>
-              <p>Loading... Please wait</p>
-            </div>
-          </div>
-  
+  <nav class="navbar" id="navbar">
+    <a onclick="redirectWithLoading('index.html')">Home</a>
+    <a onclick="redirectWithLoading('echord.html')">Chords</a>
+    <a href="#favorite">Favorite</a>
+  </nav>
+
+  <div id="loading-screen">
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Loading... Please wait</p>
+    </div>
+  </div>
 </header>
+
 
 <!-- Search Bar -->
 <section class="search" id="search-section" style="padding: 20px; text-align: center;">
@@ -434,15 +436,10 @@
 let menu = document.getElementById('menu-icon');
 let navbar = document.getElementById('navbar');
 
-menu.onclick = () => {
+menu.addEventListener('click', () => {
   menu.classList.toggle('bx-x');
   navbar.classList.toggle('active');
-};
-
-window.onscroll = () => {
-  menu.classList.remove('bx-x');
-  navbar.classList.remove('active');
-};
+});
 
 document.addEventListener('click', (event) => {
   if (!menu.contains(event.target) && !navbar.contains(event.target)) {
@@ -450,6 +447,8 @@ document.addEventListener('click', (event) => {
     navbar.classList.remove('active');
   }
 });
+
+
 
 
 function redirectWithLoading(url) {
