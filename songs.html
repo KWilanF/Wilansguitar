@@ -352,7 +352,8 @@
 
     async function fetchSongsFromBackend() {
       try {
-        const response = await fetch("fetch("https:"//guitar-backend-ujw4.onrender.com/api/songs/");
+        const response = await fetch("https://guitar-backend-ujw4.onrender.com/api/songs/"),
+
         const data = await response.json();
         songData = data;
         showSuggestions("");
