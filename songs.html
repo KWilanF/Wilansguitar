@@ -89,20 +89,20 @@
 
     /* Mobile Menu */
     .navbar {
-      position: absolute;
-      top: 60px; /* Position below the header */
-      left: 0;
-      right: 0;
-      background: #FFFFFF;
-      box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
-      display: none; /* Hide the navbar by default */
-      flex-direction: column;
-      text-align: left;
-    }
+  position: absolute;
+  top: 60px;
+  left: 0;
+  right: 0;
+  background: #FFFFFF;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+  display: none;
+  flex-direction: column;
+  text-align: left;
+}
 
-    .navbar.active {
-      display: flex; /* Show the navbar when active */
-    }
+.navbar.active {
+  display: flex;
+}
 
     .navbar a {
       padding: 15px;
@@ -392,12 +392,12 @@
   <a onclick="redirectWithLoading('index.html')" class="logo">WilaN<br>GuitaR</a>
   <div class="bx bx-menu" id="menu-icon"></div>
   
-    <ul class="navbar">
-      <li><a onclick="redirectWithLoading('index.html')">home</a></li>
-      <li><a onclick="redirectWithLoading('echord.html')">chords</a></li>
-      <li><a href="#favorite">favorite</a></li>
-  
-    </ul>
+    <nav class="navbar" id="navbar">
+  <a onclick="redirectWithLoading('index.html')">Home</a>
+  <a onclick="redirectWithLoading('echord.html')">Chords</a>
+  <a href="#favorite">Favorite</a>
+</nav>
+
           <div id="loading-screen">
             <div class="loading-container">
               <div class="spinner"></div>
@@ -431,8 +431,8 @@
 </div>
   
   <script>
-let menu = document.querySelector('#menu-icon');
-let navbar = document.querySelector('.navbar');
+let menu = document.getElementById('menu-icon');
+let navbar = document.getElementById('navbar');
 
 menu.onclick = () => {
   menu.classList.toggle('bx-x');
@@ -450,6 +450,7 @@ document.addEventListener('click', (event) => {
     navbar.classList.remove('active');
   }
 });
+
 
 function redirectWithLoading(url) {
   const loadingScreen = document.getElementById('loading-screen');
