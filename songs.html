@@ -325,106 +325,115 @@
     </div>
   </div>
 
-  <script>
-    const menu = document.getElementById("menu-icon");
-    const navbar = document.getElementById("navbar");
+  
+        <script>
+  const menu = document.getElementById("menu-icon");
+  const navbar = document.getElementById("navbar");
 
-    menu.addEventListener("click", () => {
-      navbar.classList.toggle("active");
-      menu.classList.toggle("bx-x");
-    });
+  menu.addEventListener("click", () => {
+    navbar.classList.toggle("active");
+    menu.classList.toggle("bx-x");
+  });
 
-    document.addEventListener("click", (e) => {
-      if (!navbar.contains(e.target) && !menu.contains(e.target)) {
-        navbar.classList.remove("active");
-        menu.classList.remove("bx-x");
-      }
-    });
+  document.addEventListener("click", (e) => {
+    if (!navbar.contains(e.target) && !menu.contains(e.target)) {
+      navbar.classList.remove("active");
+      menu.classList.remove("bx-x");
+    }
+  });
 
-    function redirectWithLoading(url) {
-      document.getElementById("loading-screen").style.display = "flex";
-      setTimeout(() => {
-        window.location.href = url;
-      }, 150);
+  function redirectWithLoading(url) {
+    document.getElementById("loading-screen").style.display = "flex";
+    setTimeout(() => {
+      window.location.href = url;
+    }, 150);
+  }
+
+  let songData = [];
+
+  async function fetchSongsFromBackend() {
+    try {
+      const response = await fetch("https://guitar-backend-ujw4.onrender.com/api/songs/");
+      const data = await response.json();
+      songData = data;
+      showSuggestions("");
+    } catch (err) {
+      console.error("Fetch failed:", err);
+      document.getElementById("song-results").innerHTML = `
+        <p style="color:red; text-align:center;">❌ Failed to load songs from server.</p>
+      `;
+    }
+  }
+
+  function showSuggestions(query) {
+    const results = document.getElementById("song-results");
+    const filtered = !query.trim()
+      ? songData
+      : songData.filter(song => song.title.toLowerCase().includes(query.toLowerCase()));
+
+    if (filtered.length === 0) {
+      results.innerHTML = `<p style="text-align:center;">No songs found.</p>`;
+      return;
     }
 
-    let songData = [];
+    results.innerHTML = filtered
+      .map(song => `
+        <div class="song-box" onclick="selectSong('${song.title.replace(/'/g, "\\'")}')">
+          <h3>${song.title}</h3>
+          <p>by ${song.artist}</p>
+        </div>
+      `)
+      .join("");
+  }
 
-    async function fetchSongsFromBackend() {
-      try {
-        const response = await fetch("https://guitar-backend-ujw4.onrender.com/api/songs/"),
+  function selectSong(title) {
+    document.getElementById("search-bar").value = title;
+    showSongForm(title);
+  }
 
-        const data = await response.json();
-        songData = data;
-        showSuggestions("");
-      } catch (err) {
-        console.error("Fetch failed:", err);
-      }
+  function showSongForm(title) {
+    const song = songData.find(s => s.title === title);
+    if (!song) return alert("Song not found!");
+
+    document.getElementById("song-title").innerText = song.title;
+    document.getElementById("song-artist").innerText = "by " + song.artist;
+
+    const highlightChords = line =>
+      line.replace(/\b([A-G](#|b)?(maj|min|dim|aug|add|sus|m|M)?\d*)\b/g, '<span class="chord">$1</span>');
+
+    const lyrics1 = document.getElementById("song-lyrics1");
+    const lyrics2 = document.getElementById("song-lyrics2");
+    lyrics1.innerHTML = lyrics2.innerHTML = "";
+
+    if (Array.isArray(song.lyrics)) {
+      const half = Math.ceil(song.lyrics.length / 2);
+      lyrics1.innerHTML = song.lyrics.slice(0, half).map(l =>
+        `<p><strong>${highlightChords(l.chords || "")}</strong></p><p>${highlightChords(l.line || "")}</p>`
+      ).join("");
+      lyrics2.innerHTML = song.lyrics.slice(half).map(l =>
+        `<p><strong>${highlightChords(l.chords || "")}</strong></p><p>${highlightChords(l.line || "")}</p>`
+      ).join("");
+    } else if (typeof song.lyrics === "string") {
+      const lines = song.lyrics.split("\n");
+      const half = Math.ceil(lines.length / 2);
+      lyrics1.innerHTML = lines.slice(0, half).map(line => `<p>${highlightChords(line)}</p>`).join("");
+      lyrics2.innerHTML = lines.slice(half).map(line => `<p>${highlightChords(line)}</p>`).join("");
     }
 
-    function showSuggestions(query) {
-      const results = document.getElementById("song-results");
-      const filtered = !query.trim()
-        ? songData
-        : songData.filter(song => song.title.toLowerCase().includes(query.toLowerCase()));
+    document.getElementById("song-form").style.display = "flex";
+  }
 
-      results.innerHTML = filtered
-        .map(song => `
-          <div class="song-box" onclick="selectSong('${song.title}')">
-            <h3>${song.title}</h3>
-            <p>by ${song.artist}</p>
-          </div>
-        `)
-        .join("");
-    }
+  function closeForm() {
+    document.getElementById("song-form").style.display = "none";
+  }
 
-    function selectSong(title) {
-      document.getElementById("search-bar").value = title;
-      showSongForm(title);
-    }
+  function searchSongs() {
+    const query = document.getElementById("search-bar").value;
+    showSuggestions(query);
+  }
 
-    function showSongForm(title) {
-      const song = songData.find(s => s.title === title);
-      if (!song) return alert("Song not found!");
+  window.onload = fetchSongsFromBackend;
+</script>
 
-      document.getElementById("song-title").innerText = song.title;
-      document.getElementById("song-artist").innerText = "by " + song.artist;
-
-      const highlightChords = line =>
-        line.replace(/\b([A-G](#|b)?(maj|min|dim|aug|add|sus|m|M)?\d*)\b/g, '<span class="chord">$1</span>');
-
-      const lyrics1 = document.getElementById("song-lyrics1");
-      const lyrics2 = document.getElementById("song-lyrics2");
-      lyrics1.innerHTML = lyrics2.innerHTML = "";
-
-      if (Array.isArray(song.lyrics)) {
-        const half = Math.ceil(song.lyrics.length / 2);
-        lyrics1.innerHTML = song.lyrics.slice(0, half).map(l =>
-          `<p><strong>${highlightChords(l.chords || "")}</strong></p><p>${highlightChords(l.line || "")}</p>`
-        ).join("");
-        lyrics2.innerHTML = song.lyrics.slice(half).map(l =>
-          `<p><strong>${highlightChords(l.chords || "")}</strong></p><p>${highlightChords(l.line || "")}</p>`
-        ).join("");
-      } else if (typeof song.lyrics === "string") {
-        const lines = song.lyrics.split("\n");
-        const half = Math.ceil(lines.length / 2);
-        lyrics1.innerHTML = lines.slice(0, half).map(line => `<p>${highlightChords(line)}</p>`).join("");
-        lyrics2.innerHTML = lines.slice(half).map(line => `<p>${highlightChords(line)}</p>`).join("");
-      }
-
-      document.getElementById("song-form").style.display = "flex";
-    }
-
-    function closeForm() {
-      document.getElementById("song-form").style.display = "none";
-    }
-
-    function searchSongs() {
-      const query = document.getElementById("search-bar").value;
-      showSuggestions(query);
-    }
-
-    window.onload = fetchSongsFromBackend;
-  </script>
 </body>
 </html>
