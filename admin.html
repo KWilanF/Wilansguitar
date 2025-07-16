@@ -224,78 +224,94 @@
   </div>
 
   <script>
-  
-  // Function to handle click outside the sidebar to close it
-document.addEventListener('click', function(event) {
-  const sidebar = document.getElementById("sidebar");
-  const menuButton = document.getElementById("menu-icon");
-  if (!sidebar.contains(event.target) && !menuButton.contains(event.target)) {
-    sidebar.classList.remove("active");
-  }
-});
-  
-  
-    let songs = JSON.parse(localStorage.getItem("songs")) || [];
+  const API_URL = "https://guitar-backend-ujw4.onrender.com/api/songs/";
 
-    function saveSongsToLocalStorage() {
-      localStorage.setItem("songs", JSON.stringify(songs));
-    }
+  // Fetch and display songs from the Django backend
+  async function displaySongs() {
+    const resultsDiv = document.getElementById("song-results");
+    try {
+      const response = await fetch(API_URL);
+      const songs = await response.json();
 
-    function displaySongs() {
-      const resultsDiv = document.getElementById("song-results");
       resultsDiv.innerHTML = songs
-        .map((song, index) => `
+        .map(song => `
           <div class="song-box">
             <h3>${song.title}</h3>
             <p>by ${song.artist}</p>
-            <button onclick="deleteSong(event, ${index})">Delete</button>
+            <button onclick="deleteSong(${song.id})">Delete</button>
           </div>
         `)
         .join("");
+    } catch (error) {
+      console.error("Error loading songs:", error);
+      resultsDiv.innerHTML = "<p>Failed to load songs.</p>";
     }
+  }
 
-function handleAddSong(event) {
-  event.preventDefault();
+  // Add song to Django backend
+  async function handleAddSong(event) {
+    event.preventDefault();
 
-  // Get input values
-  const title = document.getElementById("admin-title").value;
-  const artist = document.getElementById("admin-artist").value;
+    const title = document.getElementById("admin-title").value;
+    const artist = document.getElementById("admin-artist").value;
+    const lyricsRaw = document.getElementById("admin-lyrics1").value;
 
-  // Get lyrics with chords from the single textarea
-  const lyrics = document.getElementById("admin-lyrics1").value
-    .split("\n") // Split input by line
-    .map(line => ({ line })); // Store each line as an object
+    const lyrics = lyricsRaw
+      .split("\n")
+      .filter(line => line.trim() !== "")
+      .map(line => ({ line }));
 
-  // Add new song to the songs array
-  songs.push({ title, artist, lyrics });
+    const song = { title, artist, lyrics };
 
-  // Save to local storage and refresh the song list
-  saveSongsToLocalStorage();
-  displaySongs();
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(song)
+      });
 
-  // Clear the form
-  document.getElementById("admin-form").reset();
-}
-
-
-
-    function deleteSong(event, index) {
-      event.stopPropagation();
-      songs.splice(index, 1);
-      saveSongsToLocalStorage();
-      displaySongs();
+      if (response.ok) {
+        displaySongs();
+        document.getElementById("admin-form").reset();
+      } else {
+        const data = await response.json();
+        alert("Failed to add song: " + JSON.stringify(data));
+      }
+    } catch (error) {
+      console.error("Error adding song:", error);
     }
+  }
 
-    function toggleSidebar() {
-      document.getElementById("sidebar").classList.toggle("active");
+  // Delete song from Django backend
+  async function deleteSong(id) {
+    try {
+      const response = await fetch(`${API_URL}${id}/`, {
+        method: "DELETE"
+      });
+
+      if (response.ok) {
+        displaySongs();
+      } else {
+        alert("Failed to delete song.");
+      }
+    } catch (error) {
+      console.error("Error deleting song:", error);
     }
+  }
 
-    function closeSidebar() {
-      document.getElementById("sidebar").classList.remove("active");
-    }
+  function toggleSidebar() {
+    document.getElementById("sidebar").classList.toggle("active");
+  }
 
-    window.onload = displaySongs;
-  </script>
+  function closeSidebar() {
+    document.getElementById("sidebar").classList.remove("active");
+  }
+
+  window.onload = displaySongs;
+</script>
+
 </body>
 
 </html>
