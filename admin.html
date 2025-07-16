@@ -250,39 +250,35 @@
 
   // Add song to Django backend
   async function handleAddSong(event) {
-    event.preventDefault();
+  event.preventDefault();
 
-    const title = document.getElementById("admin-title").value;
-    const artist = document.getElementById("admin-artist").value;
-    const lyricsRaw = document.getElementById("admin-lyrics1").value;
+  const title = document.getElementById("admin-title").value;
+  const artist = document.getElementById("admin-artist").value;
+  const lyrics = document.getElementById("admin-lyrics1").value.trim(); // send lyrics as string
 
-    const lyrics = lyricsRaw
-      .split("\n")
-      .filter(line => line.trim() !== "")
-      .map(line => ({ line }));
+  const song = { title, artist, lyrics };
 
-    const song = { title, artist, lyrics };
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(song)
+    });
 
-    try {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(song)
-      });
-
-      if (response.ok) {
-        displaySongs();
-        document.getElementById("admin-form").reset();
-      } else {
-        const data = await response.json();
-        alert("Failed to add song: " + JSON.stringify(data));
-      }
-    } catch (error) {
-      console.error("Error adding song:", error);
+    if (response.ok) {
+      displaySongs();
+      document.getElementById("admin-form").reset();
+    } else {
+      const data = await response.json();
+      alert("Failed to add song: " + JSON.stringify(data));
     }
+  } catch (error) {
+    console.error("Error adding song:", error);
   }
+}
+
 
   // Delete song from Django backend
   async function deleteSong(id) {
