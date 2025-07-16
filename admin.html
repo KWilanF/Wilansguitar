@@ -223,7 +223,8 @@
     </section>
   </div>
 
-  <script>
+  
+    <script>
   const API_URL = "https://guitar-backend-ujw4.onrender.com/api/songs/";
 
   // Fetch and display songs from the Django backend
@@ -256,8 +257,10 @@
     const artist = document.getElementById("admin-artist").value;
     const lyricsRaw = document.getElementById("admin-lyrics1").value;
 
-    const lyrics = lyricsRaw.trim();  // just send the full textarea as one string
-
+    const lyrics = lyricsRaw
+      .split("\n")
+      .filter(line => line.trim() !== "")
+      .map(line => ({ line }));
 
     const song = { title, artist, lyrics };
 
@@ -309,6 +312,7 @@
 
   window.onload = displaySongs;
 </script>
+
 
 
 </body>
