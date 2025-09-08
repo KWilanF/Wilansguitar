@@ -76,7 +76,7 @@ function Header() {
           <Link to="/favorite" onClick={closeMenu}>favorite</Link>
         </li>
         <li>
-          <Link to="/exit" onClick={closeMenu}>exit</Link>
+
         </li>
         <li>
           <span
