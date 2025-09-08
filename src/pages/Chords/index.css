@@ -1,0 +1,76 @@
+.chords-page {
+  padding: 0;
+  min-height: 100vh;
+  background-color: #fdfdfdfd;
+  text-align: center;
+}
+
+.chords-title {
+  font-size: 2rem;
+  color: #216c27;
+  margin-bottom: 2rem;
+}
+
+/* Main chords buttons */
+.main-chords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+  
+}
+
+.main-chord-btn {
+  background-color: #ffffff;
+  border: 2px solid #216c27;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.main-chord-btn:hover,
+.main-chord-btn.active {
+  background-color: #216c27;
+  color: #ffffff;
+}
+
+/* Selected chord variations */
+.chord-variations h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #1c211c;
+}
+
+.chords-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 2rem;
+  justify-items: center;
+}
+
+.chord-card {
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.chord-card:hover {
+  transform: scale(1.05);
+}
+
+.chord-card img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
+}
+
+.chord-card p {
+  font-weight: 600;
+  color: #1c211c;
+}

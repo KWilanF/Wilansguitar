@@ -1,0 +1,100 @@
+/* src/pages/Home.css */
+:root {
+  --main-color: #216c27;
+  --second-color: #1c211c;
+}
+
+.home {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  background: #ffffff;
+  gap: 1rem;
+  
+}
+
+.home-text {
+  flex: 1 1 17rem;
+  margin-left: 25px;
+}
+
+.home-img {
+  flex: 1 1 17rem;
+  margin-left: 20px;
+}
+
+.home-img img {
+  animation: animate 3s linear infinite;
+  margin-bottom: 80px;
+  max-width: 100%;
+  height: auto;
+
+}
+
+@keyframes animate {
+  0% {
+    transform: translate(-11px, 0);
+  }
+  50% {
+    transform: translate(0, -11px);
+  }
+  100% {
+    transform: translate(-11px, 0);
+  }
+}
+
+.home-text span {
+  font-size: 1rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--second-color);
+}
+
+.home-text h1 {
+  font-family: "Lobster", cursive;
+  font-size: 3.2rem;
+  color: var(--main-color);
+  font-weight: bolder;
+}
+
+.home-text h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--second-color);
+  text-transform: uppercase;
+  margin: 0.5rem 0 1.4rem;
+}
+
+.btn {
+  padding: 7px 16px;
+  border: 2px solid var(--main-color);
+  border-radius: 40px;
+  color: var(--second-color);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn:hover {
+  color: #ffffff;
+  background: var(--second-color);
+}
+
+@media (max-width: 768px) {
+  .home-text {
+    padding-top: inherit;
+  }
+
+  .home-text span {
+    font-size: 0.9rem;
+  }
+
+  .home-text h1 {
+    font-size: 2.4rem;
+  }
+
+  .home-text h2 {
+    font-size: 1.2rem;
+  }
+}

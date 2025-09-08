@@ -1,0 +1,92 @@
+.songs-page {
+  padding: 2rem;
+  min-height: 100vh;
+  background-color: #fdfdfd;
+  text-align: center;
+}
+
+.songs-title {
+  font-size: 2rem;
+  color: #216c27;
+  margin-bottom: 1.5rem;
+}
+
+.songs-search {
+  padding: 0.5rem 1rem;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 2rem;
+  border: 2px solid #216c27;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.songs-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.songs-list li {
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.songs-list li:hover {
+  transform: scale(1.02);
+}
+
+.songs-list h3 {
+  margin: 0;
+  color: #1c211c;
+}
+
+.songs-list p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.song-details {
+  text-align: left;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.back-btn {
+  background-color: #216c27;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+.back-btn:hover {
+  background-color: #1c511f;
+}
+
+.song-details h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.song-details h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: #555;
+}
+
+.lyrics {
+  white-space: pre-wrap; /* preserves line breaks */
+  font-family: monospace;
+  font-size: 1rem;
+  color: #333;
+}
