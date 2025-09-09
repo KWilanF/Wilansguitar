@@ -22,7 +22,7 @@ const Home = () => {
         <button className="btn" onClick={() => redirectWithLoading("/songs")}>
           Play Now
         </button>
-<a
+       <a
         href="/app-debug.apk"
         style={{
           display: "inline-block",
@@ -35,8 +35,8 @@ const Home = () => {
           fontWeight: "600",
           transition: "0.3s",
         }}
-        onMouseOver={(e) => (e.target.style.backgroundColor = "#2563eb")}
-        onMouseOut={(e) => (e.target.style.backgroundColor = "#3b82f6")}
+        onMouseOver={(e) => (e.target.style.backgroundColor = "#216c27")}
+        onMouseOut={(e) => (e.target.style.backgroundColor = "#216c27")}
       >
         📥 Download WILANSGUITAR App
       </a>
