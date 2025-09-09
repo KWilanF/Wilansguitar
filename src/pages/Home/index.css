@@ -74,6 +74,7 @@
   color: var(--second-color);
   font-weight: 500;
   cursor: pointer;
+  margin: 0 0 30px 0;
 }
 
 .btn:hover {

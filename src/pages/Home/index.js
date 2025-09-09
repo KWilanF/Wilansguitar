@@ -27,7 +27,7 @@ const Home = () => {
         style={{
           display: "inline-block",
           padding: "14px 28px",
-          backgroundColor: "#3b82f6",
+          backgroundColor: "#216c27",
           color: "#fff",
           borderRadius: "10px",
           textDecoration: "none",
