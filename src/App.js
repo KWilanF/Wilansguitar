@@ -6,6 +6,8 @@ import Home from "./pages/Home"
 import Footer from "./components/Footer"
 import Chords from "./pages/Chords"
 import Songs from "./pages/Songs"
+import Login from "./pages/Login"
+import Register from "./pages/Register"
 
 
 function App() {
@@ -18,6 +20,8 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/chords" element={<Chords />} />
           <Route path="/songs" element={<Songs />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </main>
       <Footer />

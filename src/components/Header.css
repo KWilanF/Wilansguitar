@@ -2,6 +2,9 @@
   --main-color: #216c27;
   --second-color: #1c211c;
 }
+:root {
+  --header-height: 60px; /* Example: adjust to your header size */
+}
 
 header {
   position: fixed;
@@ -53,6 +56,22 @@ header {
   color: var(--main-color);
 }
 
+.login{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--main-color);
+  border-radius: 2rem;
+  height: 40px;
+  width: auto;
+}
+
+.login a{
+  color: white;
+  font-size: 0.9rem;
+}
+
+
 #menu-icon {
   font-size: 30px;
   cursor: pointer;
@@ -84,30 +103,75 @@ header {
 }
 
 
-  .navbar {
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    top: -500px;
-    left: 0;
-    right: 0;
-    flex-direction: column;
-    background: #ffffff;
-    box-shadow: 0 4px 4px rgb(14 55 54 / 24%);
-    border-top: 2px solid var(--main-color);
-    transition: 0.2s;
-    text-align: left;
-  }
+.navbar {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: -500px;
+  left: 0;
+  right: 0;
+  flex-direction: column;
+  background: #ffffff;
+  box-shadow: 0 4px 4px rgb(14 55 54 / 24%);
+  border-top: 2px solid var(--main-color);
+  transition: 0.3s ease-in-out;
+  text-align: left;
+  z-index: 999; /* Make sure it appears above content */
+}
 
-  .navbar.active {
-    top: 66px;
-  }
+/* When active, cover the whole screen below header */
+.navbar.active {
+  position: fixed;       /* fix to viewport */
+  top: var(--header-height); /* adjust this to your header’s height */
+  left: 0;
+  right: 0;
+  bottom: 0;             /* extend to bottom */
+  height: auto;
+  overflow-y: auto;      /* scroll if content too long */
+}
 
-  .navbar a {
-    padding: 1.5rem;
-    display: block;
-  }
+
+.navbar a {
+  padding: 1rem 2rem;
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #333;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.navbar a:hover {
+  background: var(--main-color, #3b82f6); /* fallback blue if not set */
+  color: #fff;
+  transform: translateX(5px); /* subtle slide */
+}
+
+/* Active link style */
+.navbar a.active {
+  background: var(--main-color, #3b82f6);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.login{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--main-color);
+  border-radius: 2rem;
+  margin: 10px 0 0 0;
+  height: 40px;
+  width: auto;
+}
+
+.login a{
+  color: white;
+}
   
   #loginButton{
     font-size: 1rem;

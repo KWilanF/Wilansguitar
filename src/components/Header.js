@@ -75,10 +75,9 @@ function Header() {
         <li>
           <Link to="/favorite" onClick={closeMenu}>favorite</Link>
         </li>
-        <li>
-
-        </li>
-        <li>
+<li className="login">
+          <Link  to="/login" onClick={closeMenu}>login</Link>
+        </li>        <li>
           <span
             id="loginButton"
             onClick={handleProfileClick}
