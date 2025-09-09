@@ -22,6 +22,24 @@ const Home = () => {
         <button className="btn" onClick={() => redirectWithLoading("/songs")}>
           Play Now
         </button>
+<a
+        href="/app-debug.apk"
+        style={{
+          display: "inline-block",
+          padding: "14px 28px",
+          backgroundColor: "#3b82f6",
+          color: "#fff",
+          borderRadius: "10px",
+          textDecoration: "none",
+          fontSize: "16px",
+          fontWeight: "600",
+          transition: "0.3s",
+        }}
+        onMouseOver={(e) => (e.target.style.backgroundColor = "#2563eb")}
+        onMouseOut={(e) => (e.target.style.backgroundColor = "#3b82f6")}
+      >
+        📥 Download WILANSGUITAR App
+      </a>
       </div>
       <div className="home-img">
         <img src={logo} alt="Guitar Background" />

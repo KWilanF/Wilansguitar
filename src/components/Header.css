@@ -112,7 +112,7 @@ header {
   left: 0;
   right: 0;
   flex-direction: column;
-  background: #ffffff;
+  background: var(--main-color);
   box-shadow: 0 4px 4px rgb(14 55 54 / 24%);
   border-top: 2px solid var(--main-color);
   transition: 0.3s ease-in-out;
@@ -137,7 +137,7 @@ header {
   display: block;
   font-size: 1.1rem;
   font-weight: 500;
-  color: #333;
+  color: #ffffff;
   text-decoration: none;
   border-radius: 8px;
   transition: all 0.3s ease;
@@ -162,7 +162,7 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--main-color);
+  background-color: white;
   border-radius: 2rem;
   margin: 10px 0 0 0;
   height: 40px;
@@ -170,7 +170,11 @@ header {
 }
 
 .login a{
-  color: white;
+  color: var(--main-color);
+}
+
+.ad{
+  margin: 100px 0 -260px 0;
 }
   
   #loginButton{

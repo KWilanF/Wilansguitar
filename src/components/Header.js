@@ -77,7 +77,8 @@ function Header() {
         </li>
 <li className="login">
           <Link  to="/login" onClick={closeMenu}>login</Link>
-        </li>        <li>
+        </li>       
+        <li className="ad">
           <span
             id="loginButton"
             onClick={handleProfileClick}
