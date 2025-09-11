@@ -1,25 +1,16 @@
-import React, { useEffect, useState } from "react";
+// src/pages/Home.js
+import React from "react";
 import "./index.css";
 import Guitar from "../../assets/Guitar.png";
 
 const Home = () => {
-  const [isWebView, setIsWebView] = useState(false);
-
-  useEffect(() => {
-    // Detect if app is running inside WebView
-    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
-    if (
-      userAgent.includes("wv") || // Android WebView
-      userAgent.includes("WebView") // iOS WebView
-    ) {
-      setIsWebView(true);
-    }
-  }, []);
-
   const redirectWithLoading = (url) => {
     window.location.href = url;
   };
+
+  // ✅ Detect query param "?app=true"
+  const urlParams = new URLSearchParams(window.location.search);
+  const isMobileApp = urlParams.get("app") === "true";
 
   return (
     <section className="home" id="home">
@@ -36,8 +27,8 @@ const Home = () => {
           Play Now
         </button>
 
-        {/* Show this only if NOT inside WebView */}
-        {!isWebView && (
+        {/* ✅ Only show this if NOT inside the mobile app */}
+        {!isMobileApp && (
           <a
             href="/app-release.apk"
             style={{
