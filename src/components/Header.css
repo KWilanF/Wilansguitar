@@ -22,21 +22,28 @@ header {
 }
 
 .logo {
-  font-size: 11px;
-  color: var(--main-color);
-  text-shadow: 1px 1px #b5b5b5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: transparent;
-  box-shadow: 0 2px 4px #000000;
-  border-radius: 40px;
   margin-left: 130px;
-  width: 40px;
-  height: 40px;
-  font-weight: 600;
-  padding: 5px;
-  text-align: center;
-  line-height: 15px;
+  width: 90px;         /* container size */
+  height: 90px;
+  overflow: hidden;    /* prevents overflow */
+  padding: 0;          /* remove extra padding */
+  cursor: pointer;
   text-decoration: none;
 }
+
+.logo-img {
+  width: 50px;
+  height: auto;
+  object-fit: cover;   /* makes image fully fill the container */
+  border-radius: 50%;  /* keeps it round */
+}
+
+
+
 
 .navbar {
   display: flex;
@@ -73,10 +80,11 @@ header {
 
 
 #menu-icon {
-  font-size: 30px;
+  font-size: 40px;
   cursor: pointer;
   z-index: 1001;
   display: none;
+  margin-right: -10px;
 }
 
 /* Responsive */
@@ -90,7 +98,6 @@ header {
   color: var(--main-color);
   text-shadow: 1px 1px #b5b5b5;
   background-color: transparent;
-  box-shadow: 0 2px 4px #000000;
   border-radius: 40px;
   margin-left: 60px;
   width: 40px;
@@ -112,7 +119,7 @@ header {
   left: 0;
   right: 0;
   flex-direction: column;
-  background: var(--main-color);
+  background: var(--second-color);
   box-shadow: 0 4px 4px rgb(14 55 54 / 24%);
   border-top: 2px solid var(--main-color);
   transition: 0.3s ease-in-out;

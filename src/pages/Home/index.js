@@ -1,7 +1,7 @@
 // src/pages/Home.js
 import React from "react";
 import "./index.css"; // We'll move your CSS here
-import logo from "../../assets/logo.png"
+import Guitar from "../../assets/Guitar.png"
 
 const Home = () => {
   const redirectWithLoading = (url) => {
@@ -38,11 +38,11 @@ const Home = () => {
         onMouseOver={(e) => (e.target.style.backgroundColor = "#216c27")}
         onMouseOut={(e) => (e.target.style.backgroundColor = "#216c27")}
       >
-        📥 Download WILANSGUITAR App
+        Download WILANSGUITAR App
       </a>
       </div>
       <div className="home-img">
-        <img src={logo} alt="Guitar Background" />
+        <img src={Guitar} alt="Guitar Background" />
       </div>
     </section>
   );

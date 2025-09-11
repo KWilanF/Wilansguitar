@@ -47,9 +47,11 @@ function Header() {
 
   return (
     <header className={`header ${menuOpen ? "active" : ""}`}>
-      <Link to="/" className="logo" onClick={closeMenu}>
-        WilaN <br /> GuitaR
-      </Link>
+<Link to="/" className="logo" onClick={closeMenu}>
+  <img src="/images/logo.png" alt="WilaN Guitar Logo" className="logo-img"  />
+  
+</Link>
+
 
       {/* Menu icon */}
       <div
