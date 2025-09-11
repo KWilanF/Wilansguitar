@@ -1,3 +1,4 @@
+// src/pages/Home.js
 import React from "react";
 import "./index.css";
 import Guitar from "../../assets/Guitar.png";
@@ -7,10 +8,9 @@ const Home = () => {
     window.location.href = url;
   };
 
-  // Detect if running inside WebToApp (mobile APK)
-  const isMobileApp =
-    typeof window !== "undefined" &&
-    (window.Android || window.webkit?.messageHandlers);
+  // ✅ Detect query param "?app=true"
+  const urlParams = new URLSearchParams(window.location.search);
+  const isMobileApp = urlParams.get("app") === "true";
 
   return (
     <section className="home" id="home">
@@ -22,10 +22,12 @@ const Home = () => {
         <h2>
           Feel free to Play <br /> your favorite songs
         </h2>
+
         <button className="btn" onClick={() => redirectWithLoading("/songs")}>
           Play Now
         </button>
 
+        {/* ✅ Button text changes depending on environment */}
         <a
           href="/app-debug.apk"
           style={{
@@ -40,7 +42,9 @@ const Home = () => {
             transition: "0.3s",
           }}
         >
-          {isMobileApp ? "Update App" : "Download WILANSGUITAR App"}
+          {isMobileApp
+            ? "Update App"
+            : "Download WILANSGUITAR App"}
         </a>
       </div>
 
