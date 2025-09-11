@@ -39,7 +39,7 @@ const Home = () => {
         {/* Show this only if NOT inside WebView */}
         {!isWebView && (
           <a
-            href="/app-debug.apk"
+            href="/app-release.apk"
             style={{
               display: "inline-block",
               padding: "14px 28px",
