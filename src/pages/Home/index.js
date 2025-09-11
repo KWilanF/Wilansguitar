@@ -1,21 +1,30 @@
-// src/pages/Home.js
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./index.css";
 import Guitar from "../../assets/Guitar.png";
 
 const Home = () => {
+  const [isWebView, setIsWebView] = useState(false);
+
+  useEffect(() => {
+    // Detect if app is running inside WebView
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+    if (
+      userAgent.includes("wv") || // Android WebView
+      userAgent.includes("WebView") // iOS WebView
+    ) {
+      setIsWebView(true);
+    }
+  }, []);
+
   const redirectWithLoading = (url) => {
     window.location.href = url;
   };
 
-  // ✅ Detect query param "?app=true"
-  const urlParams = new URLSearchParams(window.location.search);
-  const isMobileApp = urlParams.get("app") === "true";
-
   return (
     <section className="home" id="home">
       <div className="home-text">
-        <span>Maayong pag abot sa</span>
+        <span>Welcome To</span>
         <h1>
           Wilan Guitar <br /> Lyrics & Chords
         </h1>
@@ -27,25 +36,25 @@ const Home = () => {
           Play Now
         </button>
 
-        {/* ✅ Button text changes depending on environment */}
-        <a
-          href="/app-debug.apk"
-          style={{
-            display: "inline-block",
-            padding: "14px 28px",
-            backgroundColor: "#216c27",
-            color: "#fff",
-            borderRadius: "10px",
-            textDecoration: "none",
-            fontSize: "16px",
-            fontWeight: "600",
-            transition: "0.3s",
-          }}
-        >
-          {isMobileApp
-            ? "Update App"
-            : "Download WILANSGUITAR App"}
-        </a>
+        {/* Show this only if NOT inside WebView */}
+        {!isWebView && (
+          <a
+            href="/app-debug.apk"
+            style={{
+              display: "inline-block",
+              padding: "14px 28px",
+              backgroundColor: "#216c27",
+              color: "#fff",
+              borderRadius: "10px",
+              textDecoration: "none",
+              fontSize: "16px",
+              fontWeight: "600",
+              transition: "0.3s",
+            }}
+          >
+            Download WILANSGUITAR App
+          </a>
+        )}
       </div>
 
       <div className="home-img">
