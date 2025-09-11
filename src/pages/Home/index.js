@@ -15,7 +15,7 @@ const Home = () => {
   return (
     <section className="home" id="home">
       <div className="home-text">
-        <span>Welcome To</span>
+        <span>Maayong pag abot sa</span>
         <h1>
           Wilan Guitar <br /> Lyrics & Chords
         </h1>
