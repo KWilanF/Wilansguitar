@@ -1,13 +1,16 @@
-// src/pages/Home.js
 import React from "react";
-import "./index.css"; // We'll move your CSS here
-import Guitar from "../../assets/Guitar.png"
+import "./index.css";
+import Guitar from "../../assets/Guitar.png";
 
 const Home = () => {
   const redirectWithLoading = (url) => {
-    // Optional: add loading screen later if you want
     window.location.href = url;
   };
+
+  // Detect if running inside WebToApp (mobile APK)
+  const isMobileApp =
+    typeof window !== "undefined" &&
+    (window.Android || window.webkit?.messageHandlers);
 
   return (
     <section className="home" id="home">
@@ -22,25 +25,25 @@ const Home = () => {
         <button className="btn" onClick={() => redirectWithLoading("/songs")}>
           Play Now
         </button>
-       <a
-        href="/app-debug.apk"
-        style={{
-          display: "inline-block",
-          padding: "14px 28px",
-          backgroundColor: "#216c27",
-          color: "#fff",
-          borderRadius: "10px",
-          textDecoration: "none",
-          fontSize: "16px",
-          fontWeight: "600",
-          transition: "0.3s",
-        }}
-        onMouseOver={(e) => (e.target.style.backgroundColor = "#216c27")}
-        onMouseOut={(e) => (e.target.style.backgroundColor = "#216c27")}
-      >
-        Download WILANSGUITAR App
-      </a>
+
+        <a
+          href="/app-debug.apk"
+          style={{
+            display: "inline-block",
+            padding: "14px 28px",
+            backgroundColor: "#216c27",
+            color: "#fff",
+            borderRadius: "10px",
+            textDecoration: "none",
+            fontSize: "16px",
+            fontWeight: "600",
+            transition: "0.3s",
+          }}
+        >
+          {isMobileApp ? "Update App" : "Download WILANSGUITAR App"}
+        </a>
       </div>
+
       <div className="home-img">
         <img src={Guitar} alt="Guitar Background" />
       </div>
